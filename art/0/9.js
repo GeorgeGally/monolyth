@@ -1,64 +1,79 @@
 rbvj = function(){
-var numParticles = 25;
-var movers=4
-var d=200
-var d2=120
-var frames=400;
-var angle;
-var theta = 0;
 
-var dir = 1;
-
-var particles = [];
-for (var i = 0; i < numParticles; i++) {
-  addParticle(i);
-}
-
-function addParticle(i){
-      var particle = {
-        x: 0,
-        y: 0,
-        size: 10,
-        speedx: 0,
-        speedy: 0,
-        r:random(1000),
-        strokeColor: rgb(random(100,255)),
-        fillColor: rgb(random(100,255)),
-        strokeWeight: 2,
-        size: random(10),
-        me: i,
-        flip: dir
-    }
-    dir *=-1;
-    particles.push(particle);
-}
+  var grid_w = 1;
+  var grid_h = 45;
+  var engine = new particleEngine(grid_w, grid_h);
 
 
-draw = function() {
+  console.log(engine.grid);
 
-  ctx.background(0);
-  for (var i = 0; i < particles.length; i++) {
-
-    var s = Sound.mapRawSound(i, particles.length *2, 0, w/2);
-    particles[i].x = Math.sin(theta/10)*w/2 +w/2 + (s*particles[i].flip);
+  for (var i = 0; i < engine.particles.length; i++) {
+    var p = engine.particles[i];
+    p.sz = 1;
+    p.pos.x = w/2;
 
   }
-  moveParticles();
 
-  theta += 2*Math.PI/frames;
+  var pixels = randomInt(4, 20);
 
-}
+    draw = function() {
+      t_size = 50;
+      ctx.background(0);
+    	ctx.save();
+      if (chance(100)) pixels = randomInt(2, 50);
+      //drawObelisk()
+    	//ctx.clip();
+      moveParticles();
+    	drawParticles();
+      //ctx.pixelate(pixels);
+    	ctx.restore();
 
-function moveParticles(){
-  for (var i = 0; i < particles.length; i++) {
-    particle = particles[i];
-    ctx.strokeStyle= particle.strokeColor;
-    ctx.lineWidth = particle.strokeWeight;
-    ctx.line(particle.x, 0, particle.x, window.innerHeight);
-  };
+    }
 
-}
 
+
+  function moveParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      var s = Sound.mapSound(i, engine.length, 0, 5);
+      //p.sz = tween(p.sz, s, 4);
+      //p.pos.x += p.speed.x;
+      p.pos.y -= s;
+      if (p.pos.y > h + 100) p.pos.y = 0;
+      if (p.pos.y < 0) {
+        p.pos.y = h + 100;
+        p.sz = s/2;
+
+      }
+    }
+  }
+
+
+  function drawParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      ctx.strokeStyle = rgba(255);
+      ctx.lineWidth = p.sz
+      //ctx.fillRect(0, p.pos.y, w, p.sz);
+      //ctx.fillRect(left.x, p.pos.y, box_size.x, p.sz);
+      makeV(left.x, p.pos.y, right.x, p.pos.y - 80 - p.sz, right.x, p.pos.y)
+  }
+  }
+
+
+
+
+  function makeV(x1, y1, x2, y2, x3, y3) {
+    'use strict';
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.moveTo(x1, y1);
+    //ctx.lineTo(x3, y3);
+    //ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.closePath();
+   };
 
 
 }();

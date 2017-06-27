@@ -120,7 +120,8 @@ function SoundCloud(_fft) {
         function() {
           playStream(self.streamUrl());
           populateUI();
-          changeFile( randomInt(98, 122) );
+          // changeFile( randomInt(98, 122) );
+          //changeFile(98);
           }, function(){});
     };
 

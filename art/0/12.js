@@ -1,78 +1,54 @@
 rbvj = function(){
 
-var circSize= 30;
-var t = 0;
-var numDots = 120;
-var circs = [];
-var hiFreq;
-var loFreq;
-var r=180;
-var rot;
-ctx.lineWidth = 1;
-resetMe();
+  var grid_w = 10;
+  var grid_h = 45;
+  var engine = new particleEngine(grid_w, grid_h, left.x, right.y, box_size.x, box_size.y);
 
-function resetMe(){
-  rot = 0;
-  hiFreq = 0;
-  loFreq = 1000;
-  r = 180;
-  t = 0;
+  for (var i = 0; i < engine.particles.length; i++) {
+    var p = engine.particles[i];
+    p.sz = 1;
+    //p.pos.x = random(left.x, right.x);
 
-  for (var i=0; i<numDots; i++){
+  }
 
-    var circle =  {
-      r: r,
-      me: i,
-      x: r * Math.cos(t),
-      y: r * Math.sin(t),
-      orgi_x: r * Math.cos(t),
-      orgi_y: r * Math.sin(t),
-      theta: t
+
+  draw = function() {
+      ctx.background(0);
+      moveParticles();
+    	drawParticles();
     }
-    circs.push(circle);
-    t  +=  radians(360/numDots);
+
+
+
+  function moveParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      var s = Sound.mapSound(i, engine.length, 0, 5);
+      //p.sz = tween(p.sz, s, 4);
+      //p.pos.x += p.speed.x;
+      p.pos.y -= s;
+      if (p.pos.y > h) p.pos.y = 0;
+      if (p.pos.y < 0) {
+        p.pos.y = h;
+        p.sz = s/2;
+
+      }
+    }
   }
 
-  for (var i=0; i<numDots; i++){
-    drawCirc(circs[i],80);
+
+  function drawParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      ctx.strokeStyle = rgba(255);
+      ctx.lineWidth = 1;
+      ctx.fillStyle = rgba(255);
+      ctx.fillRect(100 + p.pos.x - engine.grid.spacing.x, p.pos.y, engine.grid.spacing.x, 5);
+      //makeV(p.pos.x - 50, p.pos.y, p.pos.x, p.pos.y -30 - p.sz, p.pos.x + 50, p.pos.y)
+      ctx.line(100 + p.pos.x, p.pos.y, 100 + p.pos.x, p.pos.y - p.sz*8 - 20);
   }
- }
-
-this.draw = function()  {
-
-  ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
-
-  for (var i=0; i<numDots; i++){
-    var vol = Sound.mapRawSound(i, numDots *2, 0, 100);
-    //var vol = findMapping(mic.getSprectrum(i*6),800);
-    drawCirc(circs[i],vol);
-
   }
 
-  if (randomInt(100)>90) resetMe();
-
-}
-
-
-function drawCirc( p, _rr){
-
-    ctx.save();
-    ctx.translate(width/2, height/2);
-    p.r -= (r-_rr)/5;
-    p.r = clamp(p.r, 140,400);
-    rot+=0.0001;
-    var xx = r * Math.cos(p.r)
-    var yy = r * Math.cos(p.r)
-    //ctx.strokeStyle = randomColor({luminosity: 'dark'});
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 3;
-    ctx.line(p.x, p.y, p.x+xx, p.y+yy);
-    ctx.rotate(rot);
-    p.x = p.r * Math.cos(p.theta);
-    p.y = p.r * Math.sin(p.theta);
-    ctx.restore();
-
-  }
 
 }
 

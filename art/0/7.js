@@ -1,37 +1,61 @@
 rbvj = function(){
-
-var vol = 0;
-ctx.fillStyle = rgb(0);
-var gx = randomInt(3, 25);
-var gy = randomInt(3, 25);
-
-var grid = new Grid(gx, gy);
-var engine = new particleEngine(gx * gy, grid);
-
-function reset() {
-  console.log("reset");
-  gx = randomInt(4, 115);
-  gy = randomInt(4, 200);
-  grid = new Grid(gx, gy);
-  engine = new particleEngine(gx * gy, grid);
-}
+  var grid_w = 4;
+  var grid_h = 30;
+  var engine = new particleEngine(grid_w, grid_h, box_size.x, box_size.y, left.x, right.y);
+  var pixels = random(5, 30);
 
 
-draw = function() {
-  ctx.background(255);
-  if (chance(400)) reset();
-
-  for (var i=0; i < engine.particles.length; i++){
-
+  for (var i = 0; i < engine.particles.length; i++) {
     var p = engine.particles[i];
-    vol = Sound.mapSound(i%100, 100, 1, grid.spacing_x-1) - random(0.3);
-    //vol = Sound.mapRawSound(i, engine.particles.length * 2, 0, 6);
-    p.r = tween(p.r, vol, 2);
-    ctx.fillRect(p.pos.x, p.pos.y, p.r, grid.spacing_y -2);
-    //if (chance(10)) p.pos.x+=1;
-    //if(p.pos.x + p.r > w) p.pos.x = 0;
+    p.pos.y = random(h);
+    // p.pos.x = w/2 + randomSticky(-20,20, 5);
+    // if (p.pos.x >= w/2 ) {
+    //   p.speed.x = random(-1,0)/10;
+    // } else {
+    //   p.speed.x = random(0, 1)/10;
+    // }
   }
 
-}
+  var pixels = randomInt(4, 20);
+
+    draw = function() {
+      ctx.background(0);
+    	//ctx.save();
+      if (chance(100)) pixels = randomInt(2, 50);
+
+      moveParticles();
+    	drawParticles();
+      //ctx.pixelate(pixels);
+    	//ctx.restore();
+
+    }
+
+
+
+  function moveParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      var s = Sound.mapSound(i, engine.length, 0, 20);
+      //p.sz = tween(p.sz, s, 4);
+      //p.pos.x += p.speed.x;
+      p.pos.y -= 0.1 + s/20;
+      if (p.pos.y > h) p.pos.y = 0;
+      if (p.pos.y < 0) {
+        p.pos.y = h;
+      }
+    }
+  }
+
+
+  function drawParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      ctx.fillStyle = rgba(255);
+      ctx.fillRect(p.pos.x, p.pos.y, engine.grid.spacing.x, p.sz);
+      //ctx.fillRect(left.x, left.y, box_size.x, p.sz);
+  }
+  }
+
+
 
 }();

@@ -1,73 +1,55 @@
+
 rbvj = function(){
-var particles = [];
-var radius = 220;
-var c = 0;
+  ctx.background(0);
+  ctx2.background(0);
+  var engine = new particleEngine(400);
+  pixel_size = 3;
 
-//ctx.translate(0.5, 0.5);
-var grid_w = 10;
-var grid_h = 5;
-var grid = createGrid(grid_w, grid_h, w,h);
-var num_particles = grid_w * grid_h;
+  draw = function() {
+    ctx.background(0, 0.02);
+    ctx2.fillStyle = rgba(0, 0.1);
+    ctx2.clearRect(0, 0, w, h);
+    pixelfall();
+  }
 
-for (var i = 0; i < num_particles; i++) {
+  for (var i = 0; i < engine.particles.length; i++) {
+    var p = engine.particles[i];
+    p.pos.x =  randomInt(left.x, right.x);
+    p.pos.y = randomInt(left.y, right.y);
+    p.speed.y = -0.8;
+    p.c = rgb(random(20, 255));
+    if(chance(100)) {
+      p.on = true;
+    } else {
+      p.on = false;
+    }
+  }
 
-    var m = map(i, 0, num_particles, 0, 360);
-    var cc = hsl(m, 96, 60);
-	addParticle(grid[i][0], grid[i][1], cc, i);
+function pixelfall(){
 
-}
+  for (var i = 0; i < engine.particles.length; i++) {
 
+    var p = engine.particles[i];
+    p.pos.y = p.pos.y - Math.abs(p.speed.y);
+    if (chance(10000)) p.speed.y = -10;
+    if (p.pos.y < left.y) {
+      p.pos.y = right.y;
+      p.speed.y = random(0.6, 0.9);
 
-draw = function() {
-
-	ctx.background(255);
-	moveParticles();
-	ctx.fillStyle = rgba(0,0,0,1);
-
-}
-
-
-function addParticle(_x, _y, _colour, _me){
-	var particle = {
-		x: _x,
-		y: _y,
-		c: _colour,
-		me: _me,
-		me2: (_me + randomInt(-30,30))%num_particles,
-		sz: 0,
-		angle: radians((2.2*_me)%360)
-	}
-
-	particles.push(particle);
-}
-
-function moveParticles(){
-	for (var i = 0; i < particles.length; i++) {
-		p = particles[i];
-		var sz = Sound.mapSound(10, 100, 0, 50);
-		if (sz < p.sz) {
-			p.sz = sz;
-		} else {
-      var sz = Sound.mapSound(10, 100, 0, 40);
-			p.sz =  tween(p.sz, sz, 8);
-
-
-		}
-		p.angle = tween(p.angle,radians(4*p.sz), 5);
-		ctx.translate(p.x, p.y);
-		ctx.rotate(p.angle);
-
-		cross(0, 0, p.sz*0.6, p.sz*2.2);
-		ctx.rotate(-p.angle);
-		ctx.translate(-p.x, -p.y);
-		};
+    };
+    if(p.on == true) {
+      ctx.fillStyle = p.c;
+      ctx.fillRect((p.pos.x/10)*10, p.pos.y, pixel_size, pixel_size);
+    } else {
+      ctx2.fillStyle = p.c;
+      ctx2.fillRect((p.pos.x/10)*10, p.pos.y, pixel_size, pixel_size);
+    }
+  }
 
 }
 
-function cross(_x, _y, _w, _h){
-	if (_w === undefined) _w =20;
-	if (_h === undefined) _h =60;
-	ctx.fillRect( _x - _w/2, _y - _h/2,  _w, _h);
-	ctx.fillRect( _x - _h/2, _y - _w/2,  _h, _w);
+
+
 }
-}();
+
+rbvj();

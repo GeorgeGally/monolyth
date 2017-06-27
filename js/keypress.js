@@ -29,7 +29,7 @@ $(this).keypress(function(){
 
 	var thisKey = event.keyCode;
 
-	//console.log( "KeyCode " + thisKey );
+	console.log( "KeyCode " + thisKey );
 
 	// keys a-z
 	if (thisKey>=97 && thisKey<=122) {
@@ -38,7 +38,8 @@ $(this).keypress(function(){
 
 	// keys 0-9 - keycode 48-57
 	} else if (thisKey>= 48 && thisKey<= 57) {
-
+		currentSet = thisKey-48;
+		changeFile(98);
 	} else if (thisKey == 220 && clock == false) {
 
 		clock = true;
@@ -79,22 +80,23 @@ $(this).keypress(function(){
 		microMuffle = microMuffle+0.5;
 		console.log("Add Gain: "+ microMuffle);
 
+	// ] key
 	} else if (thisKey == 93) {
 
-		//cover_count = (cover_count + 1)%6;
+		scanLinesOn = !scanLinesOn;
 
 	} else if (thisKey == 92) {
 
 
 	} else if (thisKey == 59) {
 
-		scanLinesOn = !scanLinesOn;
-
+	// [ key
 	} else if (thisKey == 91) {
 
 		blocksize = randomInt(10, 50);
 		pixelateOn = !pixelateOn;
 		console.log("pixelateOn: " + pixelateOn);
+
 	// MOUSE SETTINGS
 	} else if (thisKey == 9) {
   		if (!showCursor) {
@@ -129,8 +131,8 @@ function changeFile( thisKey ) {
         fileref.setAttribute("type","text/javascript")
         fileref.setAttribute("src", filename);
         document.getElementsByTagName("head")[0].appendChild(fileref);
-        //document.location.hash = loc;
-				setHash(loc);
+        document.location.hash = loc;
+				//setHash(loc);
 }
 
 // hack to include genre and filename in location hash

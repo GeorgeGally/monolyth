@@ -60,7 +60,7 @@ rbvj = function(){
 
   			p.y = this.pos_y + (100) * Math.sin(p.angle);
 
-  			p.sz = Sound.mapSound(me + pos_y/20, 2560, 6);
+  			p.sz = Sound.mapSound(me + pos_y/20, num_particles*2, 6);
 
   			ctx.fillStyle = rgba(0,0,0,1);
 

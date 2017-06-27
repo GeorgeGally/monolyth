@@ -43,7 +43,7 @@ function addParticle(i, x){
 draw = function() {
   ctx.background(0);
   for (var i = 0; i < particles.length; i++) {
-     var f  = Sound.mapRawSound(i, particles.length *2, 1, 20);
+     var f  = Sound.mapSound(i, particles.length *2, 1, 20);
     particles[i].speedx = f;
     particles[i].r = tween(particles[i].r, f/10*particles[i].flip, 10);
     particles[i].size = 5+tween(particles[i].size,f, 10);
@@ -58,9 +58,9 @@ draw = function() {
   } else if (stage == 3){
     moveParticles3();
   }
-
-  if(chance(5555)) stage = 2;
-  if(chance(5555)) stage = 3;
+  if(chance(1555)) stage = 1;
+  if(chance(1555)) stage = 2;
+  if(chance(1555)) stage = 3;
   //console.log(stage);
 }
 
@@ -77,7 +77,7 @@ function moveParticles3(){
   };
 }
 
-function moveParticles1(f){
+function moveParticles1(){
   for (var i = 0; i < particles.length; i++) {
     particle = particles[i];
     particle.size = 8;

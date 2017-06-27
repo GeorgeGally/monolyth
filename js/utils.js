@@ -1,5 +1,9 @@
 
 
+function loopHelper(){
+  sendToSpace();
+}
+
 
 function showUI(){
   var ui  = document.getElementById('ui');
@@ -76,6 +80,8 @@ function resetEverything(){
 	window.cancelAnimationFrame(animate);
 	animate = null;
 	pixelateOn = false;
+  ctx.background(0);
+  ctx2.clearRect(0, 0, w, h);
 }
 
 function loadScript(url, callback) {

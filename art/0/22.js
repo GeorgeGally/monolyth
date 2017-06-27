@@ -27,18 +27,18 @@ rbvj = function(){
     var s = Sound.mapSound(10, 100, 80, 180);
   	t_size = tween(t_size, s, 3);
 
-  	ctx.fillStyle = rgb(255);
-  	ctx.fillRect(0, 0, w, h);
+  	ctx.background(0, 0.1);
+
 
   	moveParticles();
 
   	ctx.save();
-  	ctx.fillStyle = rgb(0);
+  	ctx.fillStyle = rgb(0, 0.1);
 
-  	ctx.rect(w/2-t_size/2, h/2-t_size/2, t_size, t_size);
+  	ctx.rect(left.x, left.y, box_size.x, right.y);
   	ctx.clip();
-  	ctx.fillStyle = rgb(0);
-  	ctx.fillRect(w/2-t_size/2, h/2-t_size/2, t_size, t_size);
+  	ctx.fillStyle = rgb(0, 0.1);
+  	ctx.fillRect(left.x, left.y, box_size.x, right.y);
 
   	ctx.strokeStyle = rgb(255);
 
@@ -51,9 +51,10 @@ rbvj = function(){
 
   	ctx.save();
   	ctx.fillStyle = rgb(0);
-  	ctx.rect(w/2-t_size/2, h/2-t_size/2, t_size, t_size);
+  	ctx.rect(left.x, left.y, box_size.x, right.y);
   	ctx.clip();
-  	ctx.fillStyle = cols[randomInt(4)];
+  	// ctx.fillStyle = cols[randomInt(4)];
+    ctx.fillStyle = rgb(255);
   	drawParticles();
   	ctx.restore();
 

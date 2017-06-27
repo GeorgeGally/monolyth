@@ -1,52 +1,76 @@
 rbvj = function(){
+  var grid_w = 1;
+  var grid_h = 45;
+  var engine = new particleEngine(grid_w, grid_h);
 
-var circs = [];
-var r = width/8;
 
-var j = 0;
+  console.log(engine.grid);
 
-for (var _y= 10; _y < h-10; _y+=10){
-
-  for (var _x= 10; _x<w-10; _x+=r){
-    var x = _x;
-    var lw = random(12)
-    var circle =  {
-      r: r-10,
-      me: j,
-      x: x,
-      vol: 0,
-      dir: posNeg(),
-      y: _y,
-      myfill: rgb(255, 255, 255),
-      lw: lw
+  for (var i = 0; i < engine.particles.length; i++) {
+    var p = engine.particles[i];
+    p.sz = 1;
+    p.pos.x = w/2 + randomSticky(-20,20, 5);
+    if (p.pos.x >= w/2 ) {
+      p.speed.x = random(-1,0)/10;
+    } else {
+      p.speed.x = random(0, 1)/10;
     }
-    circs.push(circle);
   }
 
-  j++;
-  //console.log(j)
- }
+  var pixels = randomInt(4, 20);
 
-draw = function() {
-  ctx.background(255);
+    draw = function() {
+      t_size = 50;
+      ctx.background(0);
+    	ctx.save();
+      if (chance(100)) pixels = randomInt(2, 50);
+      //drawObelisk()
+    	//ctx.clip();
+      moveParticles();
+    	drawParticles();
+      //ctx.pixelate(pixels);
+    	ctx.restore();
 
-  ctx.strokeStyle = rgb(0);
+    }
 
-  for (var i=0; i<circs.length; i++){
 
-    var p = circs[i];
-    var s = p.dir * Sound.mapRawSound(i, circs.length *2, 0, 10);
-    p.vol = tween(p.vol, s, 10);
 
-    ctx.lineWidth = p.lw;
-    if (chance(2000)) p.dir *=-1;
-      ctx.line(p.x, p.y + p.vol, p.x + r - 5, p.y - p.vol);
-    //} else {
-//      ctx.line(p.x, p.y - p.vol, p.x + r - 5, p.y + p.vol);
-  //  }
+  function moveParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      var s = Sound.mapSound(i, engine.length*2, 0, 15);
+      //p.sz = tween(p.sz, s, 4);
+      //p.pos.x += p.speed.x;
+      p.pos.y -= s/5;
+      if (p.pos.y > h) p.pos.y = 0;
+      if (p.pos.y < 0) {
+        p.pos.y = h;
+        p.sz = s/2;
 
+      }
+    }
   }
 
-}
+
+  function drawParticles(){
+    for (var i = 0; i < engine.length; i++) {
+      var p = engine.particles[i];
+      ctx.fillStyle = rgba(255);
+      //ctx.fillRect(left.x, left.y, box_size.x, p.sz);
+      ctx.fillRect(left.x, p.pos.y, box_size.x, p.sz);
+  }
+  }
+
+
+
+  function drawObelisk(){
+    ctx.fillStyle = rgb(0);
+    ctx.eqStrokeTriangle(w/2, h/2-207, t_size/2 - 11);
+    ctx.moveTo(w/2-t_size/2 + 11, h/2-225 + t_size/2);
+    ctx.lineTo(w/2-t_size/2 + t_size -11, h/2-225 + t_size/2);
+    ctx.lineTo(w/2-t_size/2 + t_size, h/2-225 + t_size/2 + h/2 + h/4);
+    ctx.lineTo(w/2-t_size/2, h/2-225 + t_size/2 + h/2 + h/4);
+    ctx.stroke();
+  }
 
 }();

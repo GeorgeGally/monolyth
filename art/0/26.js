@@ -1,84 +1,48 @@
 rbvj = function(){
-  ctx.strokeStyle = rgb(0,0,0);
 
-  var particles = [];
-  var radius = 50;
-  var num_particles = 8;
-  var angle = 360/num_particles;
-  var circ_sz = 300;
-
-  var s1 = 1;
-  var s2 = -1;
-  var vol = 0;
-  var rot = 0;
+  ctx.background(0);
+  var pixel_size = randomInt(10, 20);
+  var line_counter = 0;
+  var hh = 0;
 
   draw = function(){
+		ctx.background(0);
+		moveParticles();
+	}
 
-    var v = map(Sound.spectrum[20],0,100, -17, 10)
-  	rot = tween(rot, radians(v)/100, 10);
-    vol = tween(vol, v/10, 240);
-  	// var x = Math.sin(rot*80)*220;
-    var x = Math.sin(vol)*220;
+	moveParticles = function(){
 
-  	ctx.fillStyle = rgb(250);
-  	ctx.fillRect(0, 0, w, h);
+		if (chance(1000)) pixel_size = random(4, 20);
 
+		for (var x = left.x; x < right.x ; x+= pixel_size) {
+			for (var y = left.y; y < h ; y+= pixel_size) {
+			//p = particles.particles[i];
 
-  	ctx.translate(w/2, h/2);
-
-  	ctx.rotate(rot);
-
-  	drawCircle(x, 0);
-  	drawCircle(-x, 0);
-
-  	ctx.rotate(-rot);
-
-  	ctx.rotate(rot + radians(45));
-
-  	drawCircle(x, 0);
-  	drawCircle(-x, 0);
-
-  	ctx.rotate(rot + radians(-45));
-
-  	ctx.rotate(rot + radians(135));
-
-  	drawCircle(x, 0);
-  	drawCircle(-x, 0);
-
-  	ctx.rotate(rot + radians(-135));
+			s = Sound.mapSound(x + y, 3600, 0, 100);
+			ctx.fillStyle = rgb(s);
+			//console.log(p.position.x)
+			ctx.fillRect(x, y, pixel_size-2, pixel_size-2);
+				//ctx.shadowOffsetY = -s/20;
+			}
 
 
-  	ctx.rotate(rot + radians(90));
+		};
 
-  	drawCircle(x, 0);
-  	drawCircle(-x, 0);
+		if (chance(4) || line_counter >= frameCount){
 
-  	ctx.rotate(rot + radians(-90));
-
-
-  	ctx.translate(-w/2, -h/2);
-
+    		if (line_counter < frameCount ) {
+                //freqs[0] = randomInt(5, 145);
+                line_counter = frameCount + 200;
+    }
+    	hh++;
+    	ctx.fillRect(left.x, right.y, box_size.x, hh);
   }
 
-  function drawCircle(x, y){
+	}
 
-  	ctx.lineWidth = 2;
-  	ctx.strokeStyle = rgb(0);
+//this.setup();
 
-  	ctx.save();
-  	ctx.ellipse(x, y, 250, 250);
-  	ctx.clip();
+}
 
-  	for (var i = 0; i < h; i+=8) {
-  		ctx.line(-w/2, i-h/2, w/2, i-h/2);
-  	}
 
-  	ctx.restore();
-
-  	ctx.lineWidth = 10;
-  	ctx.strokeStyle = rgb(0);
-  	ctx.HstrokeEllipse(x, y, 250, 250);
-
-  }
-
-}();
+rbvj();
