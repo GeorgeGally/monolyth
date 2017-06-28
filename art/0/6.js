@@ -1,12 +1,12 @@
 rbvj = function(){
 
-  var grid_w = random(3, 8);
+  var grid_w = randomInt(3, 8);
   var grid_h = 40;
   var engine = new particleEngine(grid_w, grid_h, box_size.x, box_size.y, left.x, right.y);
 
   for (var i = 0; i < engine.particles.length; i++) {
     var p = engine.particles[i];
-
+    p.pos.y = randomSticky(h, 40);
   }
 
   var pixels = randomInt(4, 20);

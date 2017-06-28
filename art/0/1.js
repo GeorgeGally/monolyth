@@ -2,9 +2,7 @@ rbvj = function(){
 
   var num = 80;
   var engine = new particleEngine(1, num);
-
-
-  console.log(engine.grid);
+  var sound_map = 20;
 
   for (var i = 0; i < engine.particles.length; i++) {
     var p = engine.particles[i];
@@ -30,7 +28,7 @@ rbvj = function(){
   function moveParticles(){
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
-      var s = Sound.mapSound(i, engine.length*2, 0, 10);
+      var s = Sound.mapSound(i, engine.length*2, 0, sound_map);
       //console.log(s);
       p.sz = tween(p.sz, s, 2);
       p.pos.y -= s/10;
@@ -45,7 +43,7 @@ rbvj = function(){
       var p = engine.particles[i];
       ctx.fillStyle = rgba(255);
       //if(chance(40))
-      ctx.fillRect(p.pos.x - engine.grid.spacing.x/2, p.pos.y, engine.grid.spacing.x, p.sz);
+      ctx.fillRect(p.pos.x - engine.grid.spacing.x/2, p.pos.y - p.sz, engine.grid.spacing.x, p.sz);
   }
   }
 

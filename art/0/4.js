@@ -1,26 +1,27 @@
 rbvj = function(){
   var num = 20;
-  var engine = new particleEngine(2, num);
+  var engine;
+  var sound_map = 4;
+  reset();
 
 
-  console.log(engine.grid);
+  function reset(){
+    engine = new particleEngine(randomInt(2,60), num, box_size.x, box_size.y, left.x, right.y);
+    for (var i = 0; i < engine.particles.length; i++) {
+      var p = engine.particles[i];
+      p.pos.y = randomSticky(h, 40);
+    }
 
-  for (var i = 0; i < engine.particles.length; i++) {
-    var p = engine.particles[i];
   }
 
   draw = function() {
 
-      t_size = 50;
       ctx.background(0);
     	moveParticles();
 
     	ctx.save();
     	ctx.fillStyle = rgb(0);
-
-    	ctx.fillStyle = rgb(0);
-    	// ctx.eqFillTriangle(w/2, h/2-205, t_size/2 - 10);
-      //drawObelisk()
+      ctx.rect(left.x, left.y, box_size.x, box_size.y);
     	ctx.clip();
     	drawParticles();
     	ctx.restore();
@@ -28,19 +29,13 @@ rbvj = function(){
     }
 
 
-  function drawObelisk(){
-    ctx.moveTo(w/2-t_size/2 + 11, h/2-225 + t_size/2);
-    ctx.lineTo(w/2-t_size/2 + t_size -11, h/2-225 + t_size/2);
-    ctx.lineTo(w/2-t_size/2 + t_size, h/2-225 + t_size/2 + h/2 + h/4);
-    ctx.lineTo(w/2-t_size/2, h/2-225 + t_size/2 + h/2 + h/4);
-    ctx.fill();
-  }
-
 
   function moveParticles(){
+
+    if(Sound.getVol()>95) reset();
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
-      var s = Sound.mapSound(i, engine.length, 0, engine.grid.spacing.y-1);
+      var s = Sound.mapSound(i, engine.length, 0, sound_map);
       p.sz = tween(p.sz, s, 2);
       p.pos.y -= s/2;
       if (p.pos.y > h) p.pos.y = 0;
@@ -53,8 +48,8 @@ rbvj = function(){
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
       ctx.fillStyle = rgba(255);
-      ctx.fillRect(p.pos.x - engine.grid.spacing.x/2, p.pos.y, engine.grid.spacing.x, p.sz);
-  }
+      ctx.centreFillRect(p.pos.x, p.pos.y - p.sz, engine.grid.spacing.x, p.sz);
+    }
   }
 
 

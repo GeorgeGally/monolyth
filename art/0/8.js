@@ -2,7 +2,7 @@ rbvj = function(){
   var grid_w = 1;
   var grid_h = 45;
   var engine = new particleEngine(grid_w, grid_h);
-
+  var sound_map = 40;
 
   console.log(engine.grid);
 
@@ -10,6 +10,7 @@ rbvj = function(){
     var p = engine.particles[i];
     p.sz = 1;
     p.pos.x = w/2 + randomSticky(-20,20, 5);
+    p.pos.y = randomSticky(h, 50);
     if (p.pos.x >= w/2 ) {
       p.speed.x = random(-1,0)/10;
     } else {
@@ -23,9 +24,9 @@ rbvj = function(){
       t_size = 50;
       ctx.background(0);
     	ctx.save();
-      if (chance(100)) pixels = randomInt(2, 50);
-      //drawObelisk()
-    	//ctx.clip();
+      ctx.fillStyle = rgb(255);
+      ctx.rect(left.x, left.y, box_size.x, box_size.y);
+      ctx.clip();
       moveParticles();
     	drawParticles();
       //ctx.pixelate(pixels);
@@ -38,8 +39,8 @@ rbvj = function(){
   function moveParticles(){
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
-      var s = Sound.mapSound(i, engine.length*2, 0, 15);
-      //p.sz = tween(p.sz, s, 4);
+      var s = Sound.mapSound(i, engine.length*2, 0, sound_map);
+      p.sz = tween(p.sz, s, 4);
       //p.pos.x += p.speed.x;
       p.pos.y -= s/5;
       if (p.pos.y > h) p.pos.y = 0;
@@ -55,9 +56,11 @@ rbvj = function(){
   function drawParticles(){
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
-      ctx.fillStyle = rgba(255);
+      ctx.strokeStyle = rgba(30 + p.sz*4);
+      ctx.lineWidth = p.sz;
       //ctx.fillRect(left.x, left.y, box_size.x, p.sz);
-      ctx.fillRect(left.x, p.pos.y, box_size.x, p.sz);
+      //ctx.fillRect(left.x, p.pos.y, box_size.x, p.sz);
+      ctx.line(left.x - 120, p.pos.y, right.x+100, p.pos.y + 200);
   }
   }
 

@@ -20,7 +20,7 @@ var pixels = randomInt(4, 20);
 
 draw = function() {
 
-    ctx.background(0, 0.05);
+    ctx.background(0, 0.08);
   	ctx.save();
     if (chance(100)) pixels = randomInt(2, 50);
     //drawObelisk()

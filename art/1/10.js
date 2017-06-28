@@ -43,7 +43,7 @@ function addParticle(i, x){
 draw = function() {
   ctx.background(0);
   for (var i = 0; i < particles.length; i++) {
-     var f  = Sound.mapRawSound(i, particles.length *2, 1, 20);
+     var f  = Sound.mapSound(i, particles.length *2, 1, 20);
     particles[i].speedx = f;
     particles[i].r = tween(particles[i].r, f/10*particles[i].flip, 10);
     particles[i].size = 5+tween(particles[i].size,f, 10);

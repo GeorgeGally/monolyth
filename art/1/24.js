@@ -53,8 +53,8 @@ rbvj = function(){
   			-20, 20);
   		if (!isNaN(r)) p.r = tween(p.r, randomInt(-40,40) + r, 5);
 
-  		x2 = p.x + (radius/2 * Math.cos(p.angle + radians(Sound.mapRawSound(i,particles.length, 0, 90))));
-  		y2 = p.y + (radius/2 * Math.sin(p.angle + radians(Sound.mapRawSound(i,particles.length, 0, 30))));
+  		x2 = p.x + (radius/2 * Math.cos(p.angle + radians(Sound.mapSound(i,particles.length, 0, 90))));
+  		y2 = p.y + (radius/2 * Math.sin(p.angle + radians(Sound.mapSound(i,particles.length, 0, 30))));
 
   		p.xx = w/2;
   		p.yy = p.y + p.r * Math.sin(p.angle);

@@ -1,9 +1,10 @@
 rbvj = function(){
 
   var num = 10;
-  var engine = new particleEngine(2, num);
+  var engine = new particleEngine(3, num);
   ctx.font = '10px Courier';
-  //ctx.textAlign = "center";
+  ctx.textAlign = "center";
+  var speed = 1;
 
   console.log(engine.grid);
 
@@ -11,11 +12,11 @@ rbvj = function(){
     var p = engine.particles[i];
     p.txt = "";
     if(chance(20)) p.on = false;
+    p.pos.y = randomSticky(h, 20);
   }
 
   draw = function() {
 
-    t_size = 50;
       ctx.background(0);
     	moveParticles();
 
@@ -34,6 +35,7 @@ rbvj = function(){
 
 
   function moveParticles(){
+    speed = Sound.getVol()/70;
     for (var i = 0; i < engine.length; i++) {
       var p = engine.particles[i];
       var s = Sound.mapSound(i, engine.length, 0, 20);
@@ -41,9 +43,9 @@ rbvj = function(){
       p.txt += s;
 
       p.sz = tween(p.sz, s, 2);
-      p.pos.y -= s/10;
-      if (p.pos.y > h) p.pos.y = 0;
-      if (p.pos.y < 0) p.pos.y = h;
+      p.pos.y -= speed;
+      //if (p.pos.y > h) p.pos.y = 0;
+      if (p.pos.y < 0) p.pos.y = h + randomSticky(100, 20);
     }
   }
 
